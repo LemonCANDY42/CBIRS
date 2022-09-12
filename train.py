@@ -17,13 +17,15 @@ from model.ResNet import ResNet50
 from utils.augmentation import tfs_img
 from torchvision.transforms import InterpolationMode
 import pytorch_ssim
+from pytorch_lightning.callbacks import ModelCheckpoint
+
 
 
 class LitAutoEncoder(pl.LightningModule):
   def __init__(self):
     super().__init__()
     self.encoder = ResNet50()
-    self.ssim_loss = pytorch_ssim.SSIM(window_size=32)
+    self.ssim_loss = pytorch_ssim.SSIM(window_size=64)
 
   def forward(self, x):
     embedding = self.encoder(x)
@@ -76,7 +78,14 @@ train_loader = torch.utils.data.DataLoader(trainset, batch_size=64, shuffle=True
 # model
 model = LitAutoEncoder()
 
+checkpoint_callback = ModelCheckpoint(monitor="train_loss")
+
+
 # training
-trainer = pl.Trainer(gpus=1, num_nodes=1, precision=16, limit_train_batches=0.5)
+trainer = pl.Trainer(accelerator='gpu', devices=1, num_nodes=1, precision=32, limit_train_batches=0.5,callbacks=[checkpoint_callback],min_epochs=100,max_epochs=1000)
+
+#断点续训
+# trainer = pl.Trainer(accelerator='gpu', devices=1, num_nodes=1, precision=32, limit_train_batches=0.5,min_epochs=100,max_epochs=1000,callbacks=[checkpoint_callback],ckpt_path=r'./lightning_logs/version_0/checkpoints/epoch=219-step=1320.ckpt')
+
 trainer.fit(model, train_loader)
 

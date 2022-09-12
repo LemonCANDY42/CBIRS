@@ -8,7 +8,7 @@
 import pytorch_lightning as pl
 import torch
 import torch.nn as nn
-from torchvision.models import resnet50
+from torchvision.models import resnet50,ResNet50_Weights
 import torch.optim as optim
 from transformers import get_linear_schedule_with_warmup
 
@@ -16,9 +16,9 @@ from transformers import get_linear_schedule_with_warmup
 class ResNet50(nn.Module):
   def __init__(self):
     super().__init__()
-    self.modle = resnet50(pretrained=True, progress=True)
+    self.modle = resnet50(weights=ResNet50_Weights.IMAGENET1K_V1, progress=True)
     self.encoder = nn.Sequential(
-      nn.Linear(1000, 1024),
+      nn.Linear(1000, 4096),
       # nn.ReLU(),
       # nn.Linear(512, 10)
     )
@@ -27,5 +27,5 @@ class ResNet50(nn.Module):
 
   def forward(self, imgs):
     x = self.encoder(self.modle(imgs))
-    y = x.view(x.size(0),1,32,32)
+    y = x.view(x.size(0),1,64,64)
     return y
