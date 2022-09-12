@@ -32,7 +32,7 @@ class LitAutoEncoder(pl.LightningModule):
     return embedding
 
   def configure_optimizers(self):
-    optimizer = torch.optim.Adam(self.parameters(), lr=1e-3)
+    optimizer = torch.optim.Adam(self.parameters(), lr=1e-4)
     return optimizer
 
   def training_step(self, train_batch, batch_idx):
@@ -82,10 +82,10 @@ checkpoint_callback = ModelCheckpoint(monitor="train_loss")
 
 
 # training
-trainer = pl.Trainer(accelerator='gpu', devices=1, num_nodes=1, precision=32, limit_train_batches=0.5,callbacks=[checkpoint_callback],min_epochs=100,max_epochs=1000)
+# trainer = pl.Trainer(accelerator='gpu', devices=1, num_nodes=1, precision=32, limit_train_batches=0.5,callbacks=[checkpoint_callback],min_epochs=100,max_epochs=1000)
 
 #断点续训
-# trainer = pl.Trainer(accelerator='gpu', devices=1, num_nodes=1, precision=32, limit_train_batches=0.5,min_epochs=100,max_epochs=1000,callbacks=[checkpoint_callback],ckpt_path=r'./lightning_logs/version_0/checkpoints/epoch=219-step=1320.ckpt')
+trainer = pl.Trainer(accelerator='gpu', devices=1, num_nodes=1, precision=32, limit_train_batches=0.5,min_epochs=100,max_epochs=1000,callbacks=[checkpoint_callback],resume_from_checkpoint=r'./lightning_logs/version_0/checkpoints/epoch=78-step=474.ckpt')
 
 trainer.fit(model, train_loader)
 
