@@ -10,7 +10,7 @@ import torch
 import torch.nn as nn
 from torchvision.models import resnet50,ResNet50_Weights
 import torch.optim as optim
-from transformers import get_linear_schedule_with_warmup
+# from transformers import get_linear_schedule_with_warmup
 
 
 class ResNet50(nn.Module):

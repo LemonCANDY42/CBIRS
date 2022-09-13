@@ -9,8 +9,13 @@ from torchvision import transforms
 from torchvision.transforms import InterpolationMode
 from PIL import Image
 
-def tfs_img(image_size):
+def tfs_resize(img_size):
+  tfs = transforms.Compose([
+    transforms.Resize(size=img_size, interpolation=InterpolationMode.BILINEAR),
+  ])
+  return tfs
 
+def tfs_img(image_size):
 
   tfs = transforms.Compose([
     transforms.Resize(size=image_size, interpolation=InterpolationMode.BILINEAR),

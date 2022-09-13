@@ -48,6 +48,9 @@ def _ssim(img1, img2, window, window_size, channel, size_average=True):
 
 
 class SSIM(torch.nn.Module):
+  '''
+    output: 1.0为原图
+  '''
   def __init__(self, window_size=11, size_average=True):
     super(SSIM, self).__init__()
     self.window_size = window_size
