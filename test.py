@@ -23,18 +23,7 @@ from utils.tools import img2tensor
 from pathlib import Path
 import pytorch_ssim
 
-
-def load_model(model_path):
-	net = LitAutoEncoder.load_from_checkpoint(model_path)
-	# torch.set_grad_enabled(False)
-	net.eval()
-	return net
-
-def model_inference(image_tensor,net):
-	x = image_tensor.unsqueeze(0)
-	with torch.no_grad():
-		out = net(x)
-	return out
+from utils.inference import load_model,model_inference
 
 
 if __name__ =="__main__":
@@ -43,11 +32,11 @@ if __name__ =="__main__":
 	model_path = Path("./lightning_logs/version_3/checkpoints/epoch=224-step=1350.ckpt")
 	net = load_model(model_path)
 
-	image_path_0 = Path("/Volumes/Sandi/Jewelry/R/CRE6981R01M14WA.jpg")
+	image_path_0 = Path("/Volumes/Sandi/Jewelry/R/DRD1523R01WM18WA.jpg")
 	image_tensor_0 = img2tensor(image_path_0)
 	result0 = model_inference(image_tensor_0,net)
 
-	image_path_1 = Path("/Volumes/Sandi/Jewelry/R/CRG5747R02WM18RA.jpg")
+	image_path_1 = Path("/Volumes/Sandi/Jewelry/R/DRD1521R01WM18YA.jpg")
 	image_tensor_1 = img2tensor(image_path_1)
 	result1 = model_inference(image_tensor_1,net)
 
